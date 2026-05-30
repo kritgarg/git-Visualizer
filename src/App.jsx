@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+import Graph from './Components/Graph'
 
 
 const App = () => {
@@ -31,16 +32,20 @@ const App = () => {
         {isGitRepo ? <h2 style={{color:"green"}}>valid Git repo</h2> : <h2 style={{color:"red"}}>not a valid Git repo</h2>}
       </div>)}
 
-      <p>{data.map((commit)=>(<div style={{border : "2px solid blue" , background:"black" , color:"white" , margin:"10px" , padding:"10px"}} key={commit.hash}> 
+   {isGitRepo && (   <p>{data.map((commit)=>(<div style={{border : "2px solid blue" , background:"black" , color:"white" , margin:"10px" , padding:"10px"}} key={commit.hash}> 
         
         <h1> commit hash : {commit.hash}</h1>
         <p> parents : {commit.parents}</p>
         <p>Author : {commit.author}</p>
         <p>Data : {commit.data}</p>
         <p>Message : {commit.message}</p>
-        </div>))}</p>
+        </div>))}</p>)}
 
+      <Graph/>
+      
     </div>
+
+
   )
 }
 
