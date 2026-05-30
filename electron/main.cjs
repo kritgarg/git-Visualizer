@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow , dialog ,ipcMain } = require('electron')
 
+const fs = require("fs");
 const path = require('path')
 
 const createWindow = () => {
@@ -18,4 +19,25 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow()
+})
+
+ipcMain.handle("select-folder" ,async() => {
+  const result = await dialog.showOpenDialog({
+    properties:["openDirectory"]
+  })
+
+  if(result.canceled){
+    return null
+  }
+
+  const selectedpath = result.filePaths[0];
+
+  const gitpath = path.join(selectedpath,".git");
+
+  const isGitrepo = fs.existsSync(gitpath)
+
+  return {
+    path:selectedpath,
+    isGitrepo,
+  }
 })
