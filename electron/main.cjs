@@ -2,6 +2,7 @@ const { app, BrowserWindow , dialog ,ipcMain } = require('electron')
 
 const fs = require("fs");
 const path = require('path')
+const {execSync} = require('child_process')
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -36,8 +37,17 @@ ipcMain.handle("select-folder" ,async() => {
 
   const isGitrepo = fs.existsSync(gitpath)
 
-  return {
-    path:selectedpath,
-    isGitrepo,
+  let commits =[]
+
+  if(isGitrepo){
+    const log = execSync(`git -C "${selectedpath}" log --all --pretty=format:"%H|%P|%an|%ad|%s|%N" --date=iso`).toString();
+    return {
+      path:selectedpath,
+      isGitrepo,
+      log
+    }
   }
+
+
+
 })
