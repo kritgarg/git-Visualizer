@@ -17,7 +17,7 @@ const App = () => {
 
     setFolder(result.path)
     setIsGitRepo(result.isGitrepo)
-    setData(result.log)
+    setData(result.commits)
   }
 
   return (
@@ -31,8 +31,15 @@ const App = () => {
         {isGitRepo ? <h2 style={{color:"green"}}>valid Git repo</h2> : <h2 style={{color:"red"}}>not a valid Git repo</h2>}
       </div>)}
 
-      <p>{data}</p>
-      
+      <p>{data.map((commit)=>(<div style={{border : "2px solid blue" , background:"black" , color:"white" , margin:"10px" , padding:"10px"}} key={commit.hash}> 
+        
+        <h1> commit hash : {commit.hash}</h1>
+        <p> parents : {commit.parents}</p>
+        <p>Author : {commit.author}</p>
+        <p>Data : {commit.data}</p>
+        <p>Message : {commit.message}</p>
+        </div>))}</p>
+
     </div>
   )
 }

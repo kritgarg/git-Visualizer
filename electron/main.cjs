@@ -40,14 +40,22 @@ ipcMain.handle("select-folder" ,async() => {
   let commits =[]
 
   if(isGitrepo){
-    const log = execSync(`git -C "${selectedpath}" log --all --pretty=format:"%H|%P|%an|%ad|%s|%N" --date=iso`).toString();
-    return {
-      path:selectedpath,
-      isGitrepo,
-      log
-    }
+    const log = execSync(`git -C "${selectedpath}" log --all --pretty=format:"%H|%P|%an|%ad|%s" --date=iso`).toString();
+
+    commits = log.split("\n").map((line)=>{
+      const [hash,parents,author,data,message] = line.split("|")
+      return {
+        hash,parents:parents? parents.split(" "):[],author,data,message
+      }
+    })
+
   }
-
-
-
+  
+  
+  
+  return {
+    path:selectedpath,
+    isGitrepo,
+    commits
+  }
 })
